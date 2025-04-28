@@ -123,3 +123,9 @@ With `pipenv`
 pipenv requirements > requirements.txt
 ```
 
+## Running the testcoverage for API endpoints and the distance calculation function
+```bash
+coverage run --source='core' --branch manage.py test core
+coverage report -m
+coverage html
+```bash

@@ -375,7 +375,7 @@ class ActionLog(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-created_at', 'id']
         verbose_name = "Action Log"
         verbose_name_plural = "Action Logs"
     
