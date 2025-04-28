@@ -148,20 +148,36 @@ class ReservationSerializer(serializers.ModelSerializer):
     def validate(self, data):
         reserved_from = data.get('reserved_from')
         reserved_to = data.get('reserved_to')
-        if reserved_from and reserved_to:
+        accommodation = data.get('accommodation')
+        
+        if reserved_from and reserved_to and accommodation:
+            # Check if end date is after start date
             if reserved_from > reserved_to:
                 raise serializers.ValidationError("End date must be after start date")
-                
-        if self.instance is None and reserved_from:
-            if reserved_from < timezone.now().date():
+            
+            # Prevent reservations starting in the past (for new reservations)
+            if self.instance is None and reserved_from < timezone.now().date():
                 raise serializers.ValidationError("Reservation start date cannot be in the past")
-                
-        accommodation = data.get('accommodation')
-        if accommodation and reserved_from and reserved_to:
+            
+            # Ensure requested dates are within accommodation's availability
             if reserved_from < accommodation.available_from or reserved_to > accommodation.available_to:
                 raise serializers.ValidationError(
                     "Requested dates are outside the accommodation's availability period"
                 )
+            
+            # Check for overlapping reservations
+            overlapping_reservations = Reservation.objects.filter(
+                accommodation=accommodation,
+                status__in=['PENDING', 'CONFIRMED'],
+                reserved_from__lt=reserved_to,
+                reserved_to__gt=reserved_from
+            ).exclude(id=self.instance.id if self.instance else None)
+            
+            if overlapping_reservations.exists():
+                raise serializers.ValidationError(
+                    "The accommodation is already reserved for the selected dates"
+                )
+        
         return data
 
 # -------------------- Rating --------------------
