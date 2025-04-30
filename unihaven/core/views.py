@@ -16,11 +16,18 @@ from .models import (
 )
 
 from .serializers import (
-    AccommodationSerializer, MemberSerializer,
+    AccommodationSerializer, MemberSerializer, UniversitySerializer,
     CEDARSSpecialistSerializer, ReservationSerializer, RatingSerializer, CampusSerializer, ActionLogSerializer
 )
 
 logger = logging.getLogger(__name__)
+
+class UniversityViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for University model, providing CRUD operations.
+    """
+    queryset = University.objects.all()
+    serializer_class = UniversitySerializer
     
 
 # Using ViewSets to handle basic CRUD operations
