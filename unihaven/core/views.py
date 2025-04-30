@@ -4,7 +4,9 @@ from rest_framework import viewsets, status, filters
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from django.utils import timezone
-
+from django.http import HttpResponse
+import os
+from django.conf import settings
 from rest_framework.pagination import PageNumberPagination
 from .utils import AddressLookupService, validate_required_fields
 
@@ -525,3 +527,8 @@ def get_action_logs(request):
     
     serializer = ActionLogSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
+
+def serve_static_schema(request):
+    with open(os.path.join(settings.BASE_DIR, 'schema.yaml'), 'r') as f:
+        schema_content = f.read()
+    return HttpResponse(schema_content, content_type='application/yaml')

@@ -7,9 +7,9 @@ from datetime import date
 def create_initial_data(sender, **kwargs):
     if sender.name == 'core':
         # Create universities
-        hku, created = University.objects.get_or_create(name='HKU', defaults={'country': 'Hong Kong', 'address': 'Hong Kong'})
-        hkust, created = University.objects.get_or_create(name='HKUST', defaults={'country': 'Hong Kong', 'address': 'Hong Kong'})
-        cuhk, created = University.objects.get_or_create(name='CUHK', defaults={'country': 'Hong Kong', 'address': 'Hong Kong'})
+        hku, created = University.objects.get_or_create(name='HKU', defaults={'country': 'China', 'address': 'Hong Kong'})
+        hkust, created = University.objects.get_or_create(name='HKUST', defaults={'country': 'China', 'address': 'Hong Kong'})
+        cuhk, created = University.objects.get_or_create(name='CUHK', defaults={'country': 'China', 'address': 'Hong Kong'})
 
         # Create members
         peter, created = Member.objects.get_or_create(name='Peter', defaults={'email': 'peter@hku.hk', 'phone': '12345678', 'university': hku})
