@@ -14,6 +14,7 @@ router.register(r'ratings', RatingViewSet)
 router.register(r'members', MemberViewSet, basename='members')
 router.register(r'specialists', SpecialistViewSet)
 router.register(r'campuses', CampusViewSet)
+router.register(r'universities', UniversityViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
