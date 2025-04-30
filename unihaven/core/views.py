@@ -522,3 +522,6 @@ def get_action_logs(request):
     result_page = paginator.paginate_queryset(logs, request)
     if not result_page:
         return Response({"error": "No logs found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = ActionLogSerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)

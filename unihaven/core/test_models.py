@@ -246,28 +246,31 @@ class DistanceCalculationTest(TestCase):
     def test_action_log(self):
         """Test the ActionLog model"""
         log = ActionLog.objects.create(
-            action_type="Create Reservation",
-            user_type="MEMBER",
+            action_type="CREATE_ACCOMMODATION",  # Use proper enum value
+            user_type="SPECIALIST",
             user_id=1,
             accommodation_id=self.accommodation_hku.id,
             details="Test log entry"
         )
         self.assertTrue(str(log))
         
-        # Test logs ordering
+        # Create a second log with current time + delay to ensure correct ordering
+        from time import sleep
+        sleep(0.1)  # Small delay to ensure second log has later timestamp
+        
         ActionLog.objects.create(
-            action_type="Create Accommodation",
-            user_type="SPECIALIST",
+            action_type="CREATE_RESERVATION",  # Use proper enum value
+            user_type="MEMBER",
             user_id=2,
             accommodation_id=self.accommodation_hku.id,
             details="Another test log entry"
         )
         
-        logs = ActionLog.objects.all()
+        logs = ActionLog.objects.all().order_by('-created_at')  # Explicitly order
         self.assertEqual(logs.count(), 2)
-        # Check that the newest log is first (if ordered by '-created_at')
-        self.assertEqual(logs.first().action_type, "Create Accommodation")
-
+        # Check that the newest log is first (ordered by '-created_at')
+        self.assertEqual(logs.first().action_type, "CREATE_RESERVATION")
+    
     def test_university_str_extra(self):
         """Covers models.py line 48"""
         self.assertEqual(str(self.university), "Test University")
