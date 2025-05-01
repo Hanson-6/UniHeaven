@@ -44,6 +44,7 @@ class AccommodationViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'building_name', 'description', 'type', 'address']
     ordering_fields = ['monthly_rent', 'num_bedrooms', 'num_beds', 'available_from']
+
     def get_serializer_context(self):
             context = super().get_serializer_context()
             if self.action in ['create', 'update']:
@@ -60,6 +61,7 @@ class AccommodationViewSet(viewsets.ModelViewSet):
             try:
                 building_name = request.data.get('building_name')
                 location_data = AddressLookupService.lookup_address(building_name)
+                print(location_data)
                 if location_data:
                     request_data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
                     request_data['latitude'] = location_data.get('latitude')
@@ -184,6 +186,7 @@ class AccommodationViewSet(viewsets.ModelViewSet):
                 return Response(data)
             except Campus.DoesNotExist:
                 return Response({"error": "Campus not found"}, status=status.HTTP_404_NOT_FOUND)
+                
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

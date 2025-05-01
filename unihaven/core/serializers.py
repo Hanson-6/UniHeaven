@@ -72,11 +72,12 @@ class AccommodationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Accommodation
         fields = [
-            'id', 'name', 'building_name', 'description', 'type', 'type_display',
+            'id', 'name', 'building_name', 'room_number', 'flat_number', 'floor_number',
+            'description', 'type', 'type_display',
             'num_bedrooms', 'num_beds', 'address', 'geo_address',
             'latitude', 'longitude', 'available_from', 'available_to',
             'monthly_rent', 'owner', 'owner_details', 'is_available', 
-            'photo', 'average_rating', 'rating_count', 'universities', 'university_ids'
+            'photo', 'average_rating', 'rating_count', 'universities', 'university_ids',
         ]
 
     def create(self, validated_data):

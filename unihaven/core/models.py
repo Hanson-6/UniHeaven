@@ -76,8 +76,8 @@ class Campus(models.Model):
 class Member(models.Model):
     """Member of HKU who can search and reserve accommodations"""
     name = models.CharField(max_length=200)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20, blank=True)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20, unique=True)
     university = models.ForeignKey(
         University,
         related_name='members',
@@ -152,6 +152,10 @@ class Accommodation(models.Model):
         blank=True,
         null=True
     )
+
+    room_number = models.CharField(max_length=20, blank=True)
+    flat_number = models.CharField(max_length=20, blank=True)
+    floor_number = models.CharField(max_length=20, blank=True)
 
     # Many-to-many relationship with University
     universities = models.ManyToManyField(
@@ -233,7 +237,9 @@ class Accommodation(models.Model):
         verbose_name = "Accommodation"
         verbose_name_plural = "Accommodations"
 
-
+        unique_together = (
+            
+        )
 
 class Reservation(models.Model):
     """
